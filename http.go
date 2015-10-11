@@ -21,7 +21,7 @@ func getEarliestCertExpiry(state *tls.ConnectionState) time.Time {
 	return earliest
 }
 
-func probeHTTP(target string, w http.ResponseWriter, module Module) (success bool) {
+func probeHTTP(target string, w http.ResponseWriter, module Module, payload string) (success bool) {
 	var isSSL, redirects int
 	config := module.HTTP
 
@@ -45,7 +45,9 @@ func probeHTTP(target string, w http.ResponseWriter, module Module) (success boo
 		config.Method = "GET"
 	}
 
-	request, err := http.NewRequest(config.Method, target, nil)
+	fmt.Printf("\\ -- // \\ // ---", payload, "\n")
+
+	request, err := http.NewRequest(config.Method, target, strings.NewReader(payload))
 	if err != nil {
 		log.Errorf("Error creating request for target %s: %s", target, err)
 	}
